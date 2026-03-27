@@ -1,0 +1,22 @@
+[
+    {
+        "user_name" : "MariBear",
+        "email" : "maribear@mail.com",
+        "phone_number" : "+612310121131"
+    },
+    {
+        "user_name" : "Sally",
+        "email" : "sally@mail.com",
+        "phone_number" : "+612310121132"
+    },
+    {
+        "user_name" : "John",
+        "email" : "john@mail.com",
+        "phone_number" : "+612310121133"
+    },
+    {
+        "user_name" : "Jane",
+        "email" : "jane@mail.com",
+        "phone_number" : "+612310121134"
+    }
+]

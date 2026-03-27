@@ -43,3 +43,12 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# LLMs
+.claude
+
+# Generated files by build runner
+*.g.dart
+*.gen.dart
+*.freezed.dart
+*.config.dart
