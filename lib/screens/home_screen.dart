@@ -11,7 +11,7 @@ import 'user_detail_screen.dart';
 ///
 /// - [initState]            → loads users from data.json on first build
 /// - [didChangeDependencies] → fires after initState & when InheritedWidgets change
-/// - [setState]             → called when users load or selection changes
+/// - [setState]             → called when users load or info changes
 /// - [deactivate]           → fires when this screen is removed from the tree
 /// - [dispose]              → fires after deactivate (permanent removal)
 class HomeScreen extends StatefulWidget {
@@ -29,11 +29,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-
   List<User> _users = [];
   bool _loading = true;
-  int _selectedIndex = -1;
 
   // ─── Lifecycle ──────────────────────────────────────────────────────────────
 
@@ -97,17 +94,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _selectUser(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    LifecycleLogger.instance.log(
-      HomeScreen.name,
-      'setState',
-      detail: 'selected → ${_users[index].userName}',
-    );
-  }
-
   // ─── Build ──────────────────────────────────────────────────────────────────
 
   @override
@@ -160,26 +146,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildUserTile(int index) {
     final user = _users[index];
-    final selected = _selectedIndex == index;
     return ListTile(
-      selected: selected,
-      selectedTileColor: Colors.blue.withAlpha(50),
       leading: CircleAvatar(child: Text(user.userName[0].toUpperCase())),
       title: Text(user.userName),
       subtitle: Text(user.email),
       trailing: const Icon(Icons.chevron_right),
-      onTap: () {
-        _selectUser(index);
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) =>
-                UserDetailScreen(
-                  users: _users,
-                  initialIndex: index,
-                  onToggleTheme: widget.onToggleTheme,
-                ),
+            builder: (_) => UserDetailScreen(
+              users: _users,
+              initialIndex: index,
+              onToggleTheme: widget.onToggleTheme,
+            ),
           ),
+        );
+        // Rebuild to reflect any edits made in UserDetailScreen.
+        setState(() {});
+        LifecycleLogger.instance.log(
+          HomeScreen.name,
+          'setState',
+          detail: 'returned from UserDetailScreen, refreshing list',
         );
       },
     );

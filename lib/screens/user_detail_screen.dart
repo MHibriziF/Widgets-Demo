@@ -136,6 +136,30 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     );
   }
 
+  void _saveUser() {
+    final updated = widget.users[_currentIndex].copyWith(
+      userName: _userNameController.text,
+      email: _emailController.text,
+      phoneNumber: _phoneController.text,
+    );
+
+    setState(() {
+      widget.users[_currentIndex] = updated;
+      LifecycleLogger.instance.log(
+        UserDetailScreen.name,
+        'setState',
+        detail: 'saved edits for ${updated.userName}',
+      );
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('User saved'),
+        duration: Duration(seconds: 1),
+      ),
+    );
+  }
+
   void _syncControllers(User user) {
     _userNameController.text = user.userName;
     _emailController.text = user.email;
@@ -226,6 +250,12 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.phone,
+                ),
+                const SizedBox(height: 12),
+                FilledButton.icon(
+                  onPressed: _saveUser,
+                  icon: const Icon(Icons.save),
+                  label: const Text('Save'),
                 ),
                 const SizedBox(height: 8),
                 const Text(
