@@ -1,17 +1,27 @@
 # widget_concerns
 
-A new Flutter project.
+A Flutter demo app for learning two core widget concepts side by side:
 
-## Getting Started
+- **Widget Lifecycle** — visualises `initState`, `didChangeDependencies`, `setState`, `didUpdateWidget`, `deactivate`, and `dispose` in real time via an on-screen log panel.
+- **Widget Composition** — contrasts a monolithic widget (counter state and static cards in one `build()`) against a properly sliced one (extracted `StatelessWidget`s with `const`), making the rebuild difference visible in DevTools Widget Rebuild Stats.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## Running
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+### With Makefile
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Setup and run
+
+```bash
+make setup
+make run
+```
+
+### With Flutter commands
+
+```bash
+flutter pub get
+flutter run
+dart run build_runner build --delete-conflicting-outputs
+```
