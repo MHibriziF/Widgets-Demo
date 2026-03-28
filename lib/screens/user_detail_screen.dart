@@ -12,22 +12,27 @@ import '../widgets/user_card.dart';
 /// - Press **Back** → [deactivate] fires, then [dispose] fires.
 ///   All three [TextEditingController]s are cleaned up inside [dispose].
 class UserDetailScreen extends StatefulWidget {
+  static const name = 'UserDetailScreen';
   final List<User> users;
   final int initialIndex;
+  final VoidCallback onToggleTheme;
 
   const UserDetailScreen({
     super.key,
     required this.users,
     required this.initialIndex,
+    required this.onToggleTheme,
   });
 
   @override
-  State<UserDetailScreen> createState() => _UserDetailScreenState();
+  // ignore: no_logic_in_create_state
+  State<UserDetailScreen> createState() {
+    LifecycleLogger.instance.log(name, 'createState');
+    return _UserDetailScreenState();
+  }
 }
 
 class _UserDetailScreenState extends State<UserDetailScreen> {
-  static const _name = 'UserDetailScreen';
-
   late int _currentIndex;
   late TextEditingController _userNameController;
   late TextEditingController _emailController;
@@ -45,7 +50,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     _emailController = TextEditingController(text: user.email);
     _phoneController = TextEditingController(text: user.phoneNumber);
     LifecycleLogger.instance.log(
-      _name,
+      UserDetailScreen.name,
       'initState',
       detail: 'user=${user.userName}, 3×TextEditingController created',
     );
@@ -54,7 +59,10 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    LifecycleLogger.instance.log(_name, 'didChangeDependencies');
+    LifecycleLogger.instance.log(
+      UserDetailScreen.name,
+      'didChangeDependencies',
+    );
   }
 
   @override
@@ -63,7 +71,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     // Fires if a parent widget rebuilds and passes a new UserDetailScreen
     // widget (same runtimeType, same key).
     LifecycleLogger.instance.log(
-      _name,
+      UserDetailScreen.name,
       'didUpdateWidget',
       detail: 'parent passed updated widget config',
     );
@@ -77,7 +85,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     // (use dispose for that). You CAN re-insert the widget into the tree
     // after deactivate; dispose means it's gone for good.
     LifecycleLogger.instance.log(
-      _name,
+      UserDetailScreen.name,
       'deactivate',
       detail: 'removed from tree (navigating back)',
     );
@@ -90,7 +98,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     _emailController.dispose();
     _phoneController.dispose();
     LifecycleLogger.instance.log(
-      _name,
+      UserDetailScreen.name,
       'dispose',
       detail: '3×TextEditingController disposed, State permanently removed',
     );
@@ -106,7 +114,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
       _syncControllers(widget.users[_currentIndex]);
     });
     LifecycleLogger.instance.log(
-      _name,
+      UserDetailScreen.name,
       'setState',
       detail:
           '→ ${widget.users[_currentIndex].userName} '
@@ -120,7 +128,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
       _syncControllers(widget.users[_currentIndex]);
     });
     LifecycleLogger.instance.log(
-      _name,
+      UserDetailScreen.name,
       'setState',
       detail:
           '→ ${widget.users[_currentIndex].userName} '
@@ -141,7 +149,20 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     final user = widget.users[_currentIndex];
 
     return Scaffold(
-      appBar: AppBar(title: Text(user.userName)),
+      appBar: AppBar(
+        title: Text(user.userName),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Theme.of(context).brightness == Brightness.light
+                  ? Icons.dark_mode
+                  : Icons.light_mode,
+            ),
+            tooltip: 'Toggle theme',
+            onPressed: widget.onToggleTheme,
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(

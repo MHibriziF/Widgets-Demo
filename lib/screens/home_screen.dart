@@ -15,16 +15,21 @@ import 'user_detail_screen.dart';
 /// - [deactivate]           → fires when this screen is removed from the tree
 /// - [dispose]              → fires after deactivate (permanent removal)
 class HomeScreen extends StatefulWidget {
+  static const name = 'HomeScreen';
   final VoidCallback onToggleTheme;
 
   const HomeScreen({super.key, required this.onToggleTheme});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  // ignore: no_logic_in_create_state
+  State<HomeScreen> createState() {
+    LifecycleLogger.instance.log(name, 'createState');
+    return _HomeScreenState();
+  }
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  static const _name = 'HomeScreen';
+
 
   List<User> _users = [];
   bool _loading = true;
@@ -38,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Called exactly once when this State object is inserted into the tree.
     // Safe to call setState indirectly (e.g. via async work).
     LifecycleLogger.instance.log(
-      _name,
+      HomeScreen.name,
       'initState',
       detail: 'loading users from data.json',
     );
@@ -54,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // whenever the theme changes (e.g. light ↔ dark toggle).
     final brightness = Theme.of(context).brightness;
     LifecycleLogger.instance.log(
-      _name,
+      HomeScreen.name,
       'didChangeDependencies',
       detail: 'Theme.brightness → $brightness',
     );
@@ -65,14 +70,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.deactivate();
     // Called when this State is removed from the widget tree — either
     // temporarily (e.g. moved) or permanently (just before dispose).
-    LifecycleLogger.instance.log(_name, 'deactivate');
+    LifecycleLogger.instance.log(HomeScreen.name, 'deactivate');
   }
 
   @override
   void dispose() {
     // Called after deactivate when the State is permanently removed.
     // Release resources here (controllers, streams, timers…).
-    LifecycleLogger.instance.log(_name, 'dispose');
+    LifecycleLogger.instance.log(HomeScreen.name, 'dispose');
     super.dispose();
   }
 
@@ -86,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _loading = false;
     });
     LifecycleLogger.instance.log(
-      _name,
+      HomeScreen.name,
       'setState',
       detail: 'users loaded (${users.length})',
     );
@@ -97,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedIndex = index;
     });
     LifecycleLogger.instance.log(
-      _name,
+      HomeScreen.name,
       'setState',
       detail: 'selected → ${_users[index].userName}',
     );
@@ -169,7 +174,11 @@ class _HomeScreenState extends State<HomeScreen> {
           context,
           MaterialPageRoute(
             builder: (_) =>
-                UserDetailScreen(users: _users, initialIndex: index),
+                UserDetailScreen(
+                  users: _users,
+                  initialIndex: index,
+                  onToggleTheme: widget.onToggleTheme,
+                ),
           ),
         );
       },

@@ -9,22 +9,25 @@ import '../utils/lifecycle_logger.dart';
 /// Flutter calls [didUpdateWidget] with the old widget so you can
 /// react to the changed configuration.
 class UserCard extends StatefulWidget {
+  static const name = 'UserCard';
   final User user;
 
   const UserCard({super.key, required this.user});
 
   @override
-  State<UserCard> createState() => _UserCardState();
+  // ignore: no_logic_in_create_state
+  State<UserCard> createState() {
+    LifecycleLogger.instance.log(name, 'createState');
+    return _UserCardState();
+  }
 }
 
 class _UserCardState extends State<UserCard> {
-  static const _name = 'UserCard';
-
   @override
   void initState() {
     super.initState();
     LifecycleLogger.instance.log(
-      _name,
+      UserCard.name,
       'initState',
       detail: 'user=${widget.user.userName}',
     );
@@ -33,7 +36,7 @@ class _UserCardState extends State<UserCard> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    LifecycleLogger.instance.log(_name, 'didChangeDependencies');
+    LifecycleLogger.instance.log(UserCard.name, 'didChangeDependencies');
   }
 
   /// Called whenever the parent widget rebuilds and passes a new config.
@@ -43,7 +46,7 @@ class _UserCardState extends State<UserCard> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.user != widget.user) {
       LifecycleLogger.instance.log(
-        _name,
+        UserCard.name,
         'didUpdateWidget',
         detail: '${oldWidget.user.userName} → ${widget.user.userName}',
       );
@@ -53,12 +56,12 @@ class _UserCardState extends State<UserCard> {
   @override
   void deactivate() {
     super.deactivate();
-    LifecycleLogger.instance.log(_name, 'deactivate');
+    LifecycleLogger.instance.log(UserCard.name, 'deactivate');
   }
 
   @override
   void dispose() {
-    LifecycleLogger.instance.log(_name, 'dispose');
+    LifecycleLogger.instance.log(UserCard.name, 'dispose');
     super.dispose();
   }
 
