@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../models/user.dart';
+import '../utils/lifecycle_logger.dart';
 import 'home_screen.dart';
 import 'logged_in_home_screen.dart';
 import 'widget_composition_screen.dart';
 
 class AppShell extends StatefulWidget {
+  static const name = 'AppShell';
   final VoidCallback onToggleTheme;
 
   const AppShell({super.key, required this.onToggleTheme});
@@ -26,9 +28,24 @@ class _AppShellState extends State<AppShell> {
     Navigator.pop(context);
   }
 
-  void _loginAs(User user) => setState(() => _loggedInUser = user);
+  void _loginAs(User user) {
+    setState(() => _loggedInUser = user);
+    LifecycleLogger.instance.log(
+      AppShell.name,
+      'setState',
+      detail:
+          'loginAs ${user.userName} → swapping HomeScreen for LoggedInHomeScreen',
+    );
+  }
 
-  void _logout() => setState(() => _loggedInUser = null);
+  void _logout() {
+    setState(() => _loggedInUser = null);
+    LifecycleLogger.instance.log(
+      AppShell.name,
+      'setState',
+      detail: 'logout → swapping LoggedInHomeScreen for HomeScreen',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
