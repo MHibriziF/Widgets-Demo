@@ -16,12 +16,14 @@ class UserDetailScreen extends StatefulWidget {
   final List<User> users;
   final int initialIndex;
   final VoidCallback onToggleTheme;
+  final void Function(User user) onLoginAs;
 
   const UserDetailScreen({
     super.key,
     required this.users,
     required this.initialIndex,
     required this.onToggleTheme,
+    required this.onLoginAs,
   });
 
   @override
@@ -176,6 +178,14 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
       appBar: AppBar(
         title: Text(user.userName),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.login),
+            tooltip: 'Login as ${user.userName}',
+            onPressed: () {
+              widget.onLoginAs(user);
+              Navigator.pop(context);
+            },
+          ),
           IconButton(
             icon: Icon(
               Theme.of(context).brightness == Brightness.light

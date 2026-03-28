@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../models/user.dart';
 import 'home_screen.dart';
+import 'logged_in_home_screen.dart';
 import 'widget_composition_screen.dart';
 
 class AppShell extends StatefulWidget {
@@ -15,13 +17,18 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   int _index = 0;
+  User? _loggedInUser;
 
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
 
   void _selectIndex(int i) {
     setState(() => _index = i);
-    Navigator.pop(context); // close drawer
+    Navigator.pop(context);
   }
+
+  void _loginAs(User user) => setState(() => _loggedInUser = user);
+
+  void _logout() => setState(() => _loggedInUser = null);
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +73,23 @@ class _AppShellState extends State<AppShell> {
       body: IndexedStack(
         index: _index,
         children: [
-          HomeScreen(
-            onToggleTheme: widget.onToggleTheme,
-            onOpenDrawer: _openDrawer,
-          ),
+          // Type swap: HomeScreen ↔ LoggedInHomeScreen.
+          // Same position, different runtimeType → Flutter disposes one State
+          // and creates the other. Watch initState/dispose in the log panel.
+          if (_loggedInUser == null)
+            HomeScreen(
+              onToggleTheme: widget.onToggleTheme,
+              onOpenDrawer: _openDrawer,
+              onLoginAs: _loginAs,
+            )
+          else
+            LoggedInHomeScreen(
+              loggedInUser: _loggedInUser!,
+              onToggleTheme: widget.onToggleTheme,
+              onOpenDrawer: _openDrawer,
+              onLogout: _logout,
+              onLoginAs: _loginAs,
+            ),
           WidgetCompositionScreen(onOpenDrawer: _openDrawer),
         ],
       ),

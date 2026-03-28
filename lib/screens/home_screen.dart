@@ -5,6 +5,7 @@ import '../models/user.dart';
 import '../services/user_service.dart';
 import '../utils/lifecycle_logger.dart';
 import '../widgets/lifecycle_demo/log_panel.dart';
+import '../widgets/lifecycle_demo/user_list_tile.dart';
 import 'user_detail_screen.dart';
 
 /// Demonstrates: [initState], [didChangeDependencies], [setState],
@@ -19,11 +20,13 @@ class HomeScreen extends StatefulWidget {
   static const name = 'HomeScreen';
   final VoidCallback onToggleTheme;
   final VoidCallback onOpenDrawer;
+  final void Function(User user) onLoginAs;
 
   const HomeScreen({
     super.key,
     required this.onToggleTheme,
     required this.onOpenDrawer,
+    required this.onLoginAs,
   });
 
   @override
@@ -155,12 +158,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildUserTile(int index) {
-    final user = _users[index];
-    return ListTile(
-      leading: CircleAvatar(child: Text(user.userName[0].toUpperCase())),
-      title: Text(user.userName),
-      subtitle: Text(user.email),
-      trailing: const Icon(Icons.chevron_right),
+    return UserListTile(
+      user: _users[index],
       onTap: () async {
         await Navigator.push(
           context,
@@ -169,6 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
               users: _users,
               initialIndex: index,
               onToggleTheme: widget.onToggleTheme,
+              onLoginAs: widget.onLoginAs,
             ),
           ),
         );
