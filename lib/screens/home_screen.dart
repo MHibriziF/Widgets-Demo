@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:widget_concerns/widgets/lifecycle_demo/ref_row.dart';
 
 import '../models/user.dart';
 import '../services/user_service.dart';
 import '../utils/lifecycle_logger.dart';
-import '../widgets/log_panel.dart';
+import '../widgets/lifecycle_demo/log_panel.dart';
 import 'user_detail_screen.dart';
 
 /// Demonstrates: [initState], [didChangeDependencies], [setState],
@@ -17,8 +18,13 @@ import 'user_detail_screen.dart';
 class HomeScreen extends StatefulWidget {
   static const name = 'HomeScreen';
   final VoidCallback onToggleTheme;
+  final VoidCallback onOpenDrawer;
 
-  const HomeScreen({super.key, required this.onToggleTheme});
+  const HomeScreen({
+    super.key,
+    required this.onToggleTheme,
+    required this.onOpenDrawer,
+  });
 
   @override
   // ignore: no_logic_in_create_state
@@ -101,6 +107,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Widget Lifecycle Demo'),
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: widget.onOpenDrawer,
+        ),
         actions: [
           IconButton(
             icon: Icon(
@@ -183,37 +193,37 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _RefRow(
+              RefRow(
                 'initState',
                 Colors.greenAccent,
                 'Called once when the State is first created. '
                     'Good for one-time setup (controllers, subscriptions).',
               ),
-              _RefRow(
+              RefRow(
                 'didChangeDependencies',
                 Colors.purpleAccent,
                 'Called after initState and whenever an InheritedWidget '
                     'this State depends on changes (Theme, MediaQuery…).',
               ),
-              _RefRow(
+              RefRow(
                 'setState',
                 Colors.lightBlueAccent,
                 'Schedules a rebuild. Only call inside the widget; '
                     'never after dispose.',
               ),
-              _RefRow(
+              RefRow(
                 'didUpdateWidget',
                 Colors.yellowAccent,
                 'Called when the parent rebuilds and passes a new widget '
                     'with the same runtimeType. Compare old vs new props here.',
               ),
-              _RefRow(
+              RefRow(
                 'deactivate',
                 Colors.orangeAccent,
                 'Called when the State is removed from the tree '
                     '(temporarily or permanently, just before dispose).',
               ),
-              _RefRow(
+              RefRow(
                 'dispose',
                 Colors.redAccent,
                 'Called after deactivate on permanent removal. '
@@ -227,35 +237,6 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () => Navigator.pop(context),
             child: const Text('Close'),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RefRow extends StatelessWidget {
-  final String method;
-  final Color color;
-  final String description;
-
-  const _RefRow(this.method, this.color, this.description);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(width: 10, height: 10, color: color),
-              const SizedBox(width: 6),
-              Text(method, style: const TextStyle(fontWeight: FontWeight.bold)),
-            ],
-          ),
-          const SizedBox(height: 2),
-          Text(description, style: const TextStyle(fontSize: 12)),
         ],
       ),
     );

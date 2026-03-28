@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../models/user.dart';
-import '../utils/lifecycle_logger.dart';
+import '../../models/user.dart';
+import '../../utils/lifecycle_logger.dart';
 
 /// Demonstrates [didUpdateWidget].
 ///

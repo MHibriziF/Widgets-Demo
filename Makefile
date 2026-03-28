@@ -1,4 +1,4 @@
-.PHONY: get gen watch run run-web clean build-apk test format analyze doctor fix setup
+.PHONY: get gen watch run run-profile run-release run-web clean build-apk test format analyze doctor fix setup
 
 ## Install dependencies
 get:
@@ -12,9 +12,17 @@ gen:
 watch:
 	dart run build_runner watch --delete-conflicting-outputs
 
-## Run on the connected device
+## Run on the connected device (debug by default, or pass m=profile/release)
 run:
-	flutter run
+	flutter run $(if $(m),--$(m),)
+
+## Run in profile mode (DevTools performance profiling)
+run-profile:
+	flutter run --profile
+
+## Run in release mode
+run-release:
+	flutter run --release
 
 ## Run on Chrome
 run-web:

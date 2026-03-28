@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../utils/lifecycle_logger.dart';
+import '../../utils/lifecycle_logger.dart';
+import 'legend.dart';
 
 class LogPanel extends StatelessWidget {
   const LogPanel({super.key});
@@ -96,12 +97,12 @@ class LogPanel extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      _Legend('initState', Colors.greenAccent),
-                      _Legend('didChangeDeps', Colors.purpleAccent),
-                      _Legend('setState', Colors.lightBlueAccent),
-                      _Legend('didUpdateWidget', Colors.yellowAccent),
-                      _Legend('deactivate', Colors.orangeAccent),
-                      _Legend('dispose', Colors.redAccent),
+                      Legend('initState', Colors.greenAccent),
+                      Legend('didChangeDeps', Colors.purpleAccent),
+                      Legend('setState', Colors.lightBlueAccent),
+                      Legend('didUpdateWidget', Colors.yellowAccent),
+                      Legend('deactivate', Colors.orangeAccent),
+                      Legend('dispose', Colors.redAccent),
                     ],
                   ),
                 ),
@@ -121,27 +122,5 @@ class LogPanel extends StatelessWidget {
     if (entry.contains('deactivate')) return Colors.orangeAccent;
     if (entry.contains('dispose')) return Colors.redAccent;
     return Colors.white70;
-  }
-}
-
-class _Legend extends StatelessWidget {
-  final String label;
-  final Color color;
-
-  const _Legend(this.label, this.color);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 12),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(width: 8, height: 8, color: color),
-          const SizedBox(width: 3),
-          Text(label, style: TextStyle(color: color, fontSize: 9)),
-        ],
-      ),
-    );
   }
 }

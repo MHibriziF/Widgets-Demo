@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'screens/home_screen.dart';
+import 'screens/app_shell.dart';
 import 'utils/lifecycle_logger.dart';
 
 class WidgetConcernsApp extends StatefulWidget {
@@ -92,8 +92,8 @@ class _WidgetConcernsAppState extends State<WidgetConcernsApp> {
         ),
         useMaterial3: true,
       ),
-      home: HomeScreen(onToggleTheme: _toggleTheme),
-      themeAnimationDuration: Duration(seconds: 0),
+      home: AppShell(onToggleTheme: _toggleTheme),
+      // themeAnimationDuration: Duration(seconds: 0),
     );
   }
 }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../models/user.dart';
 import '../utils/lifecycle_logger.dart';
-import '../widgets/log_panel.dart';
-import '../widgets/user_card.dart';
+import '../widgets/lifecycle_demo/log_panel.dart';
+import '../widgets/lifecycle_demo/user_card.dart';
 
 /// Demonstrates: [didUpdateWidget] (via [UserCard]), [deactivate], [dispose].
 ///
